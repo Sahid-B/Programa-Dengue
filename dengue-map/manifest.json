@@ -1,0 +1,17 @@
+{
+  "short_name": "Vigilancia La Concordia",
+  "name": "Sistema de Vigilancia Epidemiológica - La Concordia",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "display": "standalone",
+  "orientation": "portrait"
+}

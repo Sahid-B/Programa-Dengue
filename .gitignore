@@ -1,0 +1,18 @@
+# Node dependencies
+dengue-react/node_modules/
+dengue-react/dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local
+.env.production
