@@ -8,6 +8,8 @@ import AnalyticsDashboardPage from './pages/AnalyticsDashboardPage';
 import DashboardPage from './pages/DashboardPage';
 import TablePage from './pages/TablePage';
 import RegisterPage from './pages/RegisterPage';
+import LandingPage from './pages/LandingPage';
+import UnderConstructionPage from './pages/UnderConstructionPage';
 
 // Modals
 import UnidadModal from './components/Modals/UnidadModal';
@@ -20,13 +22,72 @@ import { pacientesService } from './services/pacientesService';
 import { enfermedadesService } from './services/enfermedadesService';
 import { unidadesService } from './services/unidadesService';
 
+// ─── Route Helpers ────────────────────────────────────────────────────────────
+const getRouteFromPath = (path) => {
+  const cleanPath = path.toLowerCase().replace(/\/$/, '') || '/';
+  switch (cleanPath) {
+    case '/control':
+      return { appView: 'control', activeTab: 'dashboard' };
+    case '/dashboard':
+      return { appView: 'mapa', activeTab: 'dashboard' };
+    case '/mapa':
+      return { appView: 'mapa', activeTab: 'map' };
+    case '/tabla':
+      return { appView: 'mapa', activeTab: 'table' };
+    case '/registro':
+      return { appView: 'mapa', activeTab: 'form' };
+    default:
+      return { appView: 'landing', activeTab: 'dashboard' };
+  }
+};
+
+const getPathFromRoute = (appView, activeTab) => {
+  if (appView === 'landing') return '/';
+  if (appView === 'control') return '/control';
+  if (appView === 'mapa') {
+    switch (activeTab) {
+      case 'map': return '/mapa';
+      case 'table': return '/tabla';
+      case 'form': return '/registro';
+      case 'dashboard': default: return '/dashboard';
+    }
+  }
+  return '/';
+};
+
 export default function App() {
   // Readonly Mode
   const urlParams = new URLSearchParams(window.location.search);
   const isReadonly = urlParams.get('readonly') === '1';
 
-  // Navigation state
-  const [activeTab, setActiveTab] = useState('dashboard');
+  // Navigation state initialized from URL
+  const initialRoute = getRouteFromPath(window.location.pathname);
+  const [appView, setAppView] = useState(initialRoute.appView);
+  const [activeTab, setActiveTab] = useState(initialRoute.activeTab);
+
+  // Sync state & URL
+  const navigateTo = (newAppView, newActiveTab = 'dashboard') => {
+    setAppView(newAppView);
+    setActiveTab(newActiveTab);
+    const targetPath = getPathFromRoute(newAppView, newActiveTab);
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState({}, '', targetPath + window.location.search);
+    }
+  };
+
+  const handleTabChange = (tab) => {
+    navigateTo('mapa', tab);
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const route = getRouteFromPath(window.location.pathname);
+      setAppView(route.appView);
+      setActiveTab(route.activeTab);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Filter state
   const [filters, setFilters] = useState({
@@ -85,7 +146,6 @@ export default function App() {
   };
 
   const loadData = (filterObj) => {
-    // Only pass date parameters to the API
     const apiFilters = {
       fecha_inicio: filterObj.fecha_inicio,
       fecha_fin: filterObj.fecha_fin
@@ -110,9 +170,9 @@ export default function App() {
       .then(data => {
         if (data.success) {
           alert('¡Paciente registrado con éxito!');
-          callback(); // resets form
+          callback();
           loadData(appliedFilters);
-          setActiveTab('map');
+          navigateTo('mapa', 'map');
         } else {
           alert('Error: ' + data.error);
         }
@@ -125,7 +185,7 @@ export default function App() {
       .then(data => {
         if (data.success) {
           alert('¡Paciente actualizado con éxito!');
-          callback(); // closes modal
+          callback();
           setEditingPaciente(null);
           loadData(appliedFilters);
         } else {
@@ -245,6 +305,24 @@ export default function App() {
     return `Mostrando todos los casos${scopeStr} — ${count} casos`;
   };
 
+  // ---- Landing screen ----
+  if (appView === 'landing') {
+    return (
+      <LandingPage
+        onSelectMapa={() => navigateTo('mapa', 'dashboard')}
+        onSelectControl={() => navigateTo('control', 'dashboard')}
+      />
+    );
+  }
+
+  // ---- Under construction ----
+  if (appView === 'control') {
+    return (
+      <UnderConstructionPage onBack={() => navigateTo('landing')} />
+    );
+  }
+
+  // ---- Main app (Mapa de Vectores) ----
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
       <Header
@@ -254,7 +332,7 @@ export default function App() {
 
       <Tabs
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         isReadonly={isReadonly}
       />
 

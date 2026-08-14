@@ -1,0 +1,360 @@
+/* ============================
+   LANDING PAGE — LIGHT & DARK THEME
+   ============================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+
+.landing-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #060b14;
+  overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  transition: background 0.3s ease;
+}
+
+/* Theme toggle top-right position */
+.landing-theme-toggle {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  z-index: 10;
+}
+
+/* Background blobs — hidden */
+.landing-mesh { display: none; }
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  transition: background 0.3s ease, opacity 0.3s ease;
+}
+.b1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #1a3a5c, transparent 70%);
+  top: -160px; left: -120px;
+  animation: blob-drift 12s ease-in-out infinite;
+}
+.b2 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, #5c1a1a, transparent 70%);
+  bottom: -120px; right: -100px;
+  animation: blob-drift 15s ease-in-out infinite reverse;
+}
+.b3 {
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, #1a2e1a, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: blob-drift 10s ease-in-out infinite 2s;
+}
+@keyframes blob-drift {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-40px) scale(1.08); }
+}
+
+/* Grid overlay */
+.landing-grid {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Layout */
+.landing-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  padding: 48px 24px;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Header */
+.landing-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.logo-container {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.landing-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+.landing-subtitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin: 0;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.landing-desc {
+  font-size: 0.95rem;
+  color: #f8fafc;
+  margin: 6px 0 0;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* ============================================
+   FLIP BUTTONS — Uiverse 3D Flip (Perfect Fit)
+   ============================================ */
+
+/* Horizontal row of buttons */
+.landing-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+/* Base button-icon container */
+.button-icon {
+  display: flex;
+  align-items: center;
+  border: 3px #fff solid;
+  width: fit-content;
+  height: 47px;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Blue variant (Mapa de Vectores) */
+.button-icon--blue {
+  border-color: #3182ce;
+}
+.button-icon--blue:hover {
+  border-color: #63b3ed;
+  box-shadow: 0 0 24px rgba(49,130,206,0.35);
+}
+.button-icon--blue .icon {
+  background-color: #3182ce;
+}
+.button-icon--blue .front {
+  background: #0d1f33;
+  color: #fff;
+}
+.button-icon--blue .top {
+  background: #3182ce;
+  color: #fff;
+}
+
+/* Red variant (Control de Vectores) */
+.button-icon--red {
+  border-color: #e53e3e;
+}
+.button-icon--red:hover {
+  border-color: #fc8181;
+  box-shadow: 0 0 24px rgba(229,62,62,0.35);
+}
+.button-icon--red .icon {
+  background-color: #e53e3e;
+}
+.button-icon--red .front {
+  background: #1f0d0d;
+  color: #fff;
+}
+.button-icon--red .top {
+  background: #e53e3e;
+  color: #fff;
+}
+
+/* Icon box */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  height: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.icon svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  display: block;
+}
+
+/* 3D Cube wrapper */
+.cube {
+  position: relative;
+  width: 200px;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Rotate cube 90deg on hover */
+.button-icon:hover .cube {
+  transform: rotateX(90deg);
+}
+
+/* 3D Faces */
+.side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  font-family: 'Inter', sans-serif;
+  backface-visibility: hidden;
+  box-sizing: border-box;
+}
+
+/* Front face: shifted forward along Z by 20.5px */
+.front {
+  transform: translateZ(20.5px);
+}
+
+/* Top face: rotated -90deg around X axis and shifted along Z by 20.5px */
+.top {
+  transform: rotateX(-90deg) translateZ(20.5px);
+}
+
+/* Footer */
+.landing-footer {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+/* ============================================
+   LIGHT THEME OVERRIDES (body.light-theme)
+   ============================================ */
+
+body.light-theme .landing-container {
+  background: #f1f5f9;
+}
+
+body.light-theme .landing-grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+}
+
+body.light-theme .b1 {
+  background: radial-gradient(circle, #bae6fd, transparent 70%);
+  opacity: 0.6;
+}
+body.light-theme .b2 {
+  background: radial-gradient(circle, #fecaca, transparent 70%);
+  opacity: 0.6;
+}
+body.light-theme .b3 {
+  background: radial-gradient(circle, #bbf7d0, transparent 70%);
+  opacity: 0.6;
+}
+
+body.light-theme .landing-title {
+  color: #0f172a;
+}
+
+body.light-theme .landing-subtitle {
+  color: #0284c7;
+}
+
+body.light-theme .landing-desc {
+  color: #64748b;
+}
+
+body.light-theme .landing-footer {
+  color: #94a3b8;
+}
+
+/* Light Theme Button Styling */
+body.light-theme .button-icon--blue {
+  border-color: #0284c7;
+}
+body.light-theme .button-icon--blue:hover {
+  border-color: #0369a1;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25);
+}
+body.light-theme .button-icon--blue .icon {
+  background-color: #0284c7;
+}
+body.light-theme .button-icon--blue .front {
+  background: #ffffff;
+  color: #0f172a;
+}
+body.light-theme .button-icon--blue .top {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+body.light-theme .button-icon--red {
+  border-color: #ef4444;
+}
+body.light-theme .button-icon--red:hover {
+  border-color: #dc2626;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+}
+body.light-theme .button-icon--red .icon {
+  background-color: #ef4444;
+}
+body.light-theme .button-icon--red .front {
+  background: #ffffff;
+  color: #0f172a;
+}
+body.light-theme .button-icon--red .top {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+  .landing-buttons {
+    flex-direction: column;
+  }
+}

@@ -104,26 +104,28 @@ function GradientDefs() {
 // ─── Stat Card ────────────────────────────────────────────────────────────────
 function StatCard({ label, value, sub, icon: Icon, accentColor, borderColor }) {
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.6) 100%)',
-      border: `1px solid ${borderColor}`,
-      borderRadius: '20px',
-      padding: '1.25rem 1.5rem',
-      display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'space-between',
-      gap: '1rem',
-      backdropFilter: 'blur(16px)',
-      boxShadow: `0 4px 24px ${borderColor}22`,
-      transition: 'transform 0.2s, box-shadow 0.2s',
-    }}
+    <div
+      className="analytics-stat-card"
+      style={{
+        background: 'linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(15,23,42,0.6) 100%)',
+        border: `1px solid ${borderColor}`,
+        borderRadius: '20px',
+        padding: '1.25rem 1.5rem',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        gap: '1rem',
+        backdropFilter: 'blur(16px)',
+        boxShadow: `0 4px 24px ${borderColor}22`,
+        transition: 'transform 0.2s, box-shadow 0.2s, background 0.3s, border-color 0.3s',
+      }}
       onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 12px 36px ${borderColor}44`; }}
       onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = `0 4px 24px ${borderColor}22`; }}
     >
       <div>
         <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: accentColor, fontWeight: 700, margin: '0 0 0.35rem 0' }}>{label}</p>
-        <p style={{ fontSize: '2.4rem', fontWeight: 800, color: '#f8fafc', lineHeight: 1, margin: '0 0 0.35rem 0', fontFamily: 'var(--font-title)' }}>{value}</p>
-        <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0 }}>{sub}</p>
+        <p className="card-val" style={{ fontSize: '2.4rem', fontWeight: 800, color: '#f8fafc', lineHeight: 1, margin: '0 0 0.35rem 0', fontFamily: 'var(--font-title)' }}>{value}</p>
+        <p className="card-sub" style={{ fontSize: '0.78rem', color: '#64748b', margin: 0 }}>{sub}</p>
       </div>
       <div style={{
         width: '46px', height: '46px', borderRadius: '14px',
@@ -141,19 +143,23 @@ function StatCard({ label, value, sub, icon: Icon, accentColor, borderColor }) {
 // ─── Chart Card ──────────────────────────────────────────────────────────────
 function ChartCard({ title, subtitle, children, style = {} }) {
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, rgba(22,33,52,0.85) 0%, rgba(11,18,36,0.85) 100%)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: '20px',
-      padding: '1.25rem 1.5rem',
-      backdropFilter: 'blur(16px)',
-      display: 'flex',
-      flexDirection: 'column',
-      ...style
-    }}>
+    <div
+      className="analytics-chart-card"
+      style={{
+        background: 'linear-gradient(135deg, rgba(22,33,52,0.85) 0%, rgba(11,18,36,0.85) 100%)',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: '20px',
+        padding: '1.25rem 1.5rem',
+        backdropFilter: 'blur(16px)',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'background 0.3s, border-color 0.3s',
+        ...style
+      }}
+    >
       <div style={{ marginBottom: '1rem' }}>
-        <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#f1f5f9', fontFamily: 'var(--font-title)' }}>{title}</p>
-        {subtitle && <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.75rem', color: '#475569' }}>{subtitle}</p>}
+        <p className="card-title-text" style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#f1f5f9', fontFamily: 'var(--font-title)' }}>{title}</p>
+        {subtitle && <p className="card-subtitle-text" style={{ margin: '0.2rem 0 0 0', fontSize: '0.75rem', color: '#475569' }}>{subtitle}</p>}
       </div>
       <div style={{ flex: 1, minHeight: 0 }}>{children}</div>
     </div>
@@ -290,7 +296,7 @@ export default function AnalyticsDashboardPage({ pacientes = [], stats = {} }) {
               return (
                 <div key={label}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                    <span style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{label}</span>
+                    <span className="severity-label" style={{ fontSize: '0.78rem', color: '#94a3b8' }}>{label}</span>
                     <span style={{ fontSize: '0.78rem', fontWeight: 700, color }}>{pct}%</span>
                   </div>
                   <div style={{ height: '8px', borderRadius: '99px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
@@ -305,7 +311,7 @@ export default function AnalyticsDashboardPage({ pacientes = [], stats = {} }) {
                 </div>
               );
             })}
-            <div style={{
+            <div className="severity-total-box" style={{
               marginTop: '0.75rem',
               padding: '0.75rem',
               background: 'rgba(56,189,248,0.06)',
@@ -317,8 +323,8 @@ export default function AnalyticsDashboardPage({ pacientes = [], stats = {} }) {
                 <TrendingUp size={14} style={{ color: '#38bdf8' }} />
                 <span style={{ fontSize: '0.72rem', color: '#38bdf8', fontWeight: 700 }}>TOTAL</span>
               </div>
-              <span style={{ fontSize: '1.8rem', fontWeight: 800, color: '#f8fafc', fontFamily: 'var(--font-title)' }}>{stats.total ?? 0}</span>
-              <p style={{ margin: '0.1rem 0 0', fontSize: '0.7rem', color: '#475569' }}>casos registrados</p>
+              <span className="severity-total-val" style={{ fontSize: '1.8rem', fontWeight: 800, color: '#f8fafc', fontFamily: 'var(--font-title)' }}>{stats.total ?? 0}</span>
+              <p className="severity-total-sub" style={{ margin: '0.1rem 0 0', fontSize: '0.7rem', color: '#475569' }}>casos registrados</p>
             </div>
           </div>
         </ChartCard>

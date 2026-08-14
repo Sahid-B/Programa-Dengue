@@ -1366,6 +1366,129 @@ body.light-theme .map-legend-item {
   color: #0f172a !important;
 }
 
+/* Light Theme Overrides for Dashboard Cards & Charts */
+body.light-theme .analytics-stat-card {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .analytics-stat-card .card-val {
+  color: #0f172a !important;
+}
+
+body.light-theme .analytics-stat-card .card-sub {
+  color: #64748b !important;
+}
+
+body.light-theme .analytics-chart-card {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .analytics-chart-card .card-title-text {
+  color: #0f172a !important;
+}
+
+body.light-theme .analytics-chart-card .card-subtitle-text {
+  color: #64748b !important;
+}
+
+body.light-theme .recharts-cartesian-grid line {
+  stroke: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-theme .recharts-text {
+  fill: #475569 !important;
+}
+
+body.light-theme .recharts-legend-item-text {
+  color: #334155 !important;
+}
+
+/* Light Theme Overrides for Modals */
+body.light-theme .modal-overlay {
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+body.light-theme .modal {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18) !important;
+  color: #0f172a !important;
+}
+
+body.light-theme .modal h2,
+body.light-theme .modal h3,
+body.light-theme .modal h4 {
+  color: #0f172a !important;
+}
+
+body.light-theme .modal p,
+body.light-theme .modal label,
+body.light-theme .modal span {
+  color: #334155 !important;
+}
+
+body.light-theme .modal input,
+body.light-theme .modal select,
+body.light-theme .modal textarea {
+  background: #f8fafc !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0f172a !important;
+}
+
+body.light-theme .modal input:disabled,
+body.light-theme .modal select:disabled,
+body.light-theme .modal textarea:disabled {
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+body.light-theme .modal input:focus,
+body.light-theme .modal select:focus,
+body.light-theme .modal textarea:focus {
+  background: #ffffff !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
+body.light-theme .modal .btn-cancel {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+}
+
+body.light-theme .modal .btn-cancel:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Light Theme Overrides for Severidad Box */
+body.light-theme .severity-label {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+body.light-theme .severity-total-box {
+  background: rgba(2, 132, 199, 0.08) !important;
+  border-color: rgba(2, 132, 199, 0.2) !important;
+}
+
+body.light-theme .severity-total-val {
+  color: #0f172a !important;
+}
+
+body.light-theme .severity-total-sub {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+
+
+
 
 
 
