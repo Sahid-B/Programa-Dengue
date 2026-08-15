@@ -209,7 +209,8 @@
   box-sizing: border-box;
   flex-shrink: 0;
 }
-.icon svg {
+.button-icon--blue .icon svg,
+.button-icon--red .icon svg {
   width: 24px;
   height: 24px;
   color: #fff;

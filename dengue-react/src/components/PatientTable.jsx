@@ -3,8 +3,10 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import Chart from 'chart.js/auto';
 import { Download, Edit, Trash2, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { useAlert } from '../context/AlertContext';
 
 export default function PatientTable({ pacientes, onEdit, onDelete, isReadonly }) {
+  const { showAlert } = useAlert();
   const [search, setSearch] = useState('');
   const [exporting, setExporting] = useState(false);
   
@@ -59,7 +61,7 @@ export default function PatientTable({ pacientes, onEdit, onDelete, isReadonly }
   // Generate Excel report with aggregate data and Chart.js graphics
   const handleExportExcel = async () => {
     if (pacientes.length === 0) {
-      alert('No hay datos para exportar.');
+      showAlert('No hay datos para exportar.', 'warning');
       return;
     }
 
@@ -243,7 +245,7 @@ export default function PatientTable({ pacientes, onEdit, onDelete, isReadonly }
 
     } catch (error) {
       console.error('Error al exportar a Excel:', error);
-      alert('Hubo un error al generar el archivo Excel.');
+      showAlert('Hubo un error al generar el archivo Excel.', 'error');
     } finally {
       setExporting(false);
     }

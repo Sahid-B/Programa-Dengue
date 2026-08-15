@@ -50,12 +50,6 @@ export default function UnderConstructionPage({ onBack }) {
       <div className="uc-grid"></div>
 
       <div className="uc-content">
-
-        {/* Icon */}
-        <div className="uc-icon-wrap">
-          <WrenchIcon />
-        </div>
-
         <div className="uc-text">
           <h1 className="uc-title">En Construcción</h1>
           <p className="uc-subtitle">Control de Vectores</p>
@@ -63,27 +57,6 @@ export default function UnderConstructionPage({ onBack }) {
             Este módulo está siendo desarrollado activamente. Pronto estará disponible
             con todas las funcionalidades de gestión vectorial.
           </p>
-        </div>
-
-        {/* Progress bar */}
-        <div className="uc-progress-wrap">
-          <div className="uc-progress-label">
-            <span>Progreso del desarrollo</span>
-            <span className="uc-pct">En curso</span>
-          </div>
-          <div className="uc-progress-bar">
-            <div className="uc-progress-fill"></div>
-          </div>
-        </div>
-
-        {/* Features coming */}
-        <div className="uc-features">
-          {features.map((f, i) => (
-            <div key={i} className="uc-feature">
-              <span className="uc-feat-icon">{f.icon}</span>
-              <span>{f.label}</span>
-            </div>
-          ))}
         </div>
 
         {/* Back button */}

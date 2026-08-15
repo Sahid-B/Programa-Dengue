@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Tabs from './components/Tabs';
 import FilterBar from './components/FilterBar';
+import { useAlert } from './context/AlertContext';
 
 // Pages
 import AnalyticsDashboardPage from './pages/AnalyticsDashboardPage';
@@ -17,6 +18,9 @@ import EnfermedadModal from './components/Modals/EnfermedadModal';
 import EditPacienteModal from './components/Modals/EditPacienteModal';
 import ShareModal from './components/Modals/ShareModal';
 
+// Auth Pages
+import { LoginPage, RegisterPage as UserRegisterPage } from './pages/AuthPages';
+
 // Services
 import { pacientesService } from './services/pacientesService';
 import { enfermedadesService } from './services/enfermedadesService';
@@ -28,6 +32,10 @@ const getRouteFromPath = (path) => {
   switch (cleanPath) {
     case '/control':
       return { appView: 'control', activeTab: 'dashboard' };
+    case '/login':
+      return { appView: 'login', activeTab: 'dashboard' };
+    case '/registro-usuario':
+      return { appView: 'register', activeTab: 'dashboard' };
     case '/dashboard':
       return { appView: 'mapa', activeTab: 'dashboard' };
     case '/mapa':
@@ -44,6 +52,8 @@ const getRouteFromPath = (path) => {
 const getPathFromRoute = (appView, activeTab) => {
   if (appView === 'landing') return '/';
   if (appView === 'control') return '/control';
+  if (appView === 'login') return '/login';
+  if (appView === 'register') return '/registro-usuario';
   if (appView === 'mapa') {
     switch (activeTab) {
       case 'map': return '/mapa';
@@ -56,6 +66,26 @@ const getPathFromRoute = (appView, activeTab) => {
 };
 
 export default function App() {
+  const { showAlert, showConfirm } = useAlert();
+
+  // Auth State
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('currentUser');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const handleAuthSuccess = (user) => {
+    setCurrentUser(user);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    navigateTo('mapa', 'dashboard');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('currentUser');
+    navigateTo('landing');
+  };
+
   // Readonly Mode
   const urlParams = new URLSearchParams(window.location.search);
   const isReadonly = urlParams.get('readonly') === '1';
@@ -64,6 +94,13 @@ export default function App() {
   const initialRoute = getRouteFromPath(window.location.pathname);
   const [appView, setAppView] = useState(initialRoute.appView);
   const [activeTab, setActiveTab] = useState(initialRoute.activeTab);
+
+  // Guard protected routes
+  useEffect(() => {
+    if (!currentUser && appView !== 'landing' && appView !== 'login' && appView !== 'register') {
+      navigateTo('login');
+    }
+  }, [currentUser, appView]);
 
   // Sync state & URL
   const navigateTo = (newAppView, newActiveTab = 'dashboard') => {
@@ -169,72 +206,75 @@ export default function App() {
     pacientesService.createPaciente(payload)
       .then(data => {
         if (data.success) {
-          alert('¡Paciente registrado con éxito!');
+          showAlert('¡Paciente registrado con éxito!', 'success');
           callback();
           loadData(appliedFilters);
           navigateTo('mapa', 'map');
         } else {
-          alert('Error: ' + data.error);
+          showAlert('Error: ' + data.error, 'error');
         }
       })
-      .catch(err => alert('Error de conexión al registrar.'));
+      .catch(err => showAlert('Error de conexión al registrar.', 'error'));
   };
 
   const handleUpdatePaciente = (id, payload, callback) => {
     pacientesService.updatePaciente(id, payload)
       .then(data => {
         if (data.success) {
-          alert('¡Paciente actualizado con éxito!');
+          showAlert('¡Paciente actualizado con éxito!', 'success');
           callback();
           setEditingPaciente(null);
           loadData(appliedFilters);
         } else {
-          alert('Error: ' + data.error);
+          showAlert('Error: ' + data.error, 'error');
         }
       })
-      .catch(err => alert('Error de conexión al actualizar.'));
+      .catch(err => showAlert('Error de conexión al actualizar.', 'error'));
   };
 
   const handleDeletePaciente = (id) => {
-    if (window.confirm('¿Está seguro de que desea eliminar este paciente? Esta acción no se puede deshacer.')) {
-      pacientesService.deletePaciente(id)
-        .then(data => {
-          if (data.success) {
-            loadData(appliedFilters);
-          } else {
-            alert('Error al eliminar: ' + data.error);
-          }
-        })
-        .catch(err => alert('Error de conexión al eliminar.'));
-    }
+    showConfirm(
+      '¿Está seguro de que desea eliminar este paciente? Esta acción no se puede deshacer.',
+      () => {
+        pacientesService.deletePaciente(id)
+          .then(data => {
+            if (data.success) {
+              loadData(appliedFilters);
+            } else {
+              showAlert('Error al eliminar: ' + data.error, 'error');
+            }
+          })
+          .catch(err => showAlert('Error de conexión al eliminar.', 'error'));
+      }
+    );
   };
 
   const handleCreateUnidad = (payload, callback) => {
     unidadesService.createUnidad(payload)
       .then(data => {
         if (data.success) {
-          alert('¡Nueva unidad operativa registrada!');
+          showAlert('¡Nueva unidad operativa registrada!', 'success');
           callback();
           loadCatalogs();
         } else {
-          alert('Error: ' + data.error);
+          showAlert('Error: ' + data.error, 'error');
         }
       })
-      .catch(err => alert('Error de conexión al crear unidad.'));
+      .catch(err => showAlert('Error de conexión al crear unidad.', 'error'));
   };
 
   const handleCreateEnfermedad = (payload, callback) => {
     enfermedadesService.createEnfermedad(payload)
       .then(data => {
         if (data.success) {
-          alert('¡Nueva enfermedad registrada!');
+          showAlert('¡Nueva enfermedad registrada!', 'success');
           callback();
           loadCatalogs();
         } else {
-          alert('Error: ' + data.error);
+          showAlert('Error: ' + data.error, 'error');
         }
       })
-      .catch(err => alert('Error de conexión al crear enfermedad.'));
+      .catch(err => showAlert('Error de conexión al crear enfermedad.', 'error'));
   };
 
   // Filter patients by selected district in applied filters
@@ -311,6 +351,29 @@ export default function App() {
       <LandingPage
         onSelectMapa={() => navigateTo('mapa', 'dashboard')}
         onSelectControl={() => navigateTo('control', 'dashboard')}
+        currentUser={currentUser}
+        onLogout={handleLogout}
+        onOpenLogin={() => navigateTo('login')}
+        onOpenRegister={() => navigateTo('register')}
+      />
+    );
+  }
+
+  // ---- Login screen ----
+  if (appView === 'login') {
+    return (
+      <LoginPage
+        onAuthSuccess={handleAuthSuccess}
+        onNavigate={(view) => navigateTo(view)}
+      />
+    );
+  }
+
+  // ---- Register screen ----
+  if (appView === 'register') {
+    return (
+      <UserRegisterPage
+        onNavigate={(view) => navigateTo(view)}
       />
     );
   }
@@ -328,6 +391,9 @@ export default function App() {
       <Header
         isReadonly={isReadonly}
         onShareClick={() => setIsShareOpen(true)}
+        onBackMenu={() => navigateTo('landing')}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       <Tabs

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { Navigation } from 'lucide-react';
+import { useAlert } from '../context/AlertContext';
 
 export default function PatientForm({ distritos, enfermedades, onSubmit, onAddUnidad, onAddEnfermedad }) {
+  const { showAlert } = useAlert();
   const today = new Date().toISOString().split('T')[0];
 
   // Form State
@@ -95,10 +97,10 @@ export default function PatientForm({ distritos, enfermedades, onSubmit, onAddUn
           setLongitud(lng);
           updateMarker(lat, lng);
         },
-        (err) => alert('No se pudo obtener la ubicación: ' + err.message)
+        (err) => showAlert('No se pudo obtener la ubicación: ' + err.message, 'error')
       );
     } else {
-      alert('Geolocalización no soportada por el navegador.');
+      showAlert('Geolocalización no soportada por el navegador.', 'warning');
     }
   };
 
@@ -106,12 +108,12 @@ export default function PatientForm({ distritos, enfermedades, onSubmit, onAddUn
     e.preventDefault();
 
     if (cedula && !/^\d{10}$/.test(cedula)) {
-      alert('La cédula debe tener exactamente 10 dígitos numéricos.');
+      showAlert('La cédula debe tener exactamente 10 dígitos numéricos.', 'warning');
       return;
     }
 
     if (telefono && !/^\d{10}$/.test(telefono)) {
-      alert('El teléfono debe tener exactamente 10 dígitos numéricos.');
+      showAlert('El teléfono debe tener exactamente 10 dígitos numéricos.', 'warning');
       return;
     }
 
