@@ -1,0 +1,20 @@
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all 0.25s ease;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.1);
+}

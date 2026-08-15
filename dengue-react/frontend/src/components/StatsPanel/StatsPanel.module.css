@@ -1,0 +1,151 @@
+.icon-primary {
+  color: var(--primary);
+}
+
+.icon-red {
+  color: var(--accent-red);
+}
+
+.icon-green {
+  color: var(--accent-green);
+}
+
+.icon-purple {
+  color: var(--accent-purple);
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.label-text {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.list-item-column {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.bold-primary {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.bold-red {
+  font-weight: bold;
+  color: var(--accent-red);
+}
+
+.bold-green {
+  font-weight: bold;
+  color: var(--accent-green);
+}
+
+.sub-text {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.text-muted-small {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.latest-patient-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+}
+
+.bold-bold {
+  font-weight: bold;
+}
+
+.patient-label {
+  color: var(--text-secondary);
+}
+
+.patient-value {
+  color: var(--primary);
+}
+
+.title-icon {
+  color: var(--primary);
+}
+
+.no-cases-alert {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  color: var(--accent-red);
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.extra-stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.stats-section-title {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.table-scroll-container {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.table-no-margin {
+  margin: 0;
+}
+
+.th-sticky {
+  position: sticky;
+  top: 0;
+  background: rgba(12, 12, 16, 0.95);
+  backdrop-filter: var(--blur);
+}
+
+.list-item-padding {
+  padding: 0.25rem 0;
+}
+
+.text-secondary-bold {
+  font-weight: bold;
+  color: var(--text-secondary);
+}

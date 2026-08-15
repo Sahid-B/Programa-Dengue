@@ -1,0 +1,6 @@
+.container {
+  flex: 1;
+  padding: 1.5rem;
+  overflow: hidden;
+  height: 100%;
+}

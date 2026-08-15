@@ -1,0 +1,67 @@
+.illustration-container {
+  max-width: 580px;
+  width: 90%;
+  text-align: center;
+  padding: 1rem;
+}
+
+.illustration-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.btn-back:hover {
+  color: var(--text-primary);
+}
+
+.logo-img {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem auto;
+  display: block;
+}
+
+.auth-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 0.5rem 0;
+  font-family: var(--font-title);
+}
+
+.auth-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+}
+
+.submit-btn {
+  margin-top: 1.5rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.flex-col-1 {
+  flex: 1;
+}

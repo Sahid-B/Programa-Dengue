@@ -1,0 +1,40 @@
+.date-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.25rem;
+}
+
+.calendar-icon {
+  color: var(--primary);
+}
+
+.separator {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.district-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 0.25rem;
+}
+
+.map-pin-icon {
+  color: var(--accent-orange);
+}
+
+.buttons-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  align-items: center;
+}
+
+.btn-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}

@@ -1,0 +1,56 @@
+.modal-share {
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal-title {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.link-icon {
+  color: var(--primary);
+}
+
+.modal-desc {
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.loading-text {
+  padding: 1rem;
+  color: var(--text-secondary);
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.share-input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--primary);
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.btn-copy {
+  width: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 1rem;
+}
+
+.actions-center {
+  justify-content: center;
+}

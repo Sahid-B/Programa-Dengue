@@ -1,0 +1,19 @@
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.color-input {
+  width: 50px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.color-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
