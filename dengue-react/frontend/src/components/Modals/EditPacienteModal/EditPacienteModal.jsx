@@ -209,12 +209,12 @@ export default function EditPacienteModal({ isOpen, onClose, paciente, distritos
     const payload = {
       id: paciente.id,
       fecha_consulta: fechaConsulta,
-      enfermedad_id: enfermedadId,
-      unidad_id: unidadId,
+      enfermedad_id: parseInt(enfermedadId),
+      unidad_operativa_id: unidadId ? parseInt(unidadId) : null,
       nombre_completo: nombreCompleto,
       cedula,
       telefono,
-      edad,
+      edad: parseInt(edad),
       sexo,
       direccion_barrio: barrio,
       latitud,
@@ -222,7 +222,7 @@ export default function EditPacienteModal({ isOpen, onClose, paciente, distritos
       observaciones
     };
 
-    onSubmit(payload);
+    onSubmit(payload.id, payload, onClose);
   };
 
   if (!isOpen) return null;

@@ -2,9 +2,22 @@
 require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $where = "1=1";
-    $params = [];
-    $types = "";
+    $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+    if ($userId === 0) {
+        echo json_encode([
+            'total' => 0,
+            'graves' => 0,
+            'normales' => 0,
+            'ultimo_reporte' => null,
+            'por_barrio' => [],
+            'por_enfermedad' => []
+        ]);
+        exit;
+    }
+
+    $where = "p.usuario_id = ? AND p.activo = 1";
+    $params = [$userId];
+    $types = "i";
 
     if (!empty($_GET['fecha_inicio']) && !empty($_GET['fecha_fin'])) {
         $where .= " AND p.fecha_consulta BETWEEN ? AND ?";

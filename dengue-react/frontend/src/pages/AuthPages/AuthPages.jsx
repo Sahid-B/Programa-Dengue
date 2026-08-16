@@ -58,13 +58,21 @@ export default function AuthPages({ view = 'login', onNavigate, onAuthSuccess })
 
     try {
       if (view === 'login') {
-        const user = await authService.login(correo, contrasena);
-        onAuthSuccess(user);
-        showAlert('Sesión iniciada con éxito.', 'success');
+        const response = await authService.login(correo, contrasena);
+        if (response.success && response.user) {
+          onAuthSuccess(response.user);
+          showAlert('Sesión iniciada con éxito.', 'success');
+        } else {
+          showAlert('Error al obtener datos del usuario', 'error');
+        }
       } else {
-        const user = await authService.register(nombre, apellido, correo, contrasena);
-        showAlert('Registro exitoso. Iniciando sesión...', 'success');
-        onAuthSuccess(user);
+        const response = await authService.register(nombre, apellido, correo, contrasena);
+        if (response.success && response.user) {
+          showAlert('Registro exitoso. Iniciando sesión...', 'success');
+          onAuthSuccess(response.user);
+        } else {
+          showAlert('Error al registrar el usuario', 'error');
+        }
       }
     } catch (error) {
       showAlert(error.message || 'Error en el proceso de autenticación', 'error');
@@ -83,8 +91,7 @@ export default function AuthPages({ view = 'login', onNavigate, onAuthSuccess })
       try {
         const user = await authService.registerGoogle(tokenResponse.access_token);
         showAlert(`¡Bienvenido, ${user.nombre}! Cuenta Google vinculada.`, 'success');
-        // Navigate back to login which will call onAuthSuccess via the flow
-        onNavigate('login');
+        onAuthSuccess(user);
       } catch {
         showAlert('Error al obtener datos de Google', 'error');
       }

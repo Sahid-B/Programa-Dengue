@@ -33,6 +33,17 @@ export const api = {
         url.searchParams.append(key, params[key]);
       }
     });
+
+    // Automatically append user_id from localStorage if logged in
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        if (u && u.id) {
+          url.searchParams.append('user_id', u.id);
+        }
+      } catch (e) {}
+    }
     
     // Si es en producción y usamos paths relativos, el constructor de URL de arriba con window.location.origin puede cambiar la ruta absoluta
     // Por eso, para producción o rutas locales, es más seguro usar un string directo si es path relativo

@@ -15,6 +15,7 @@ import UnderConstructionPage from './pages/UnderConstructionPage/UnderConstructi
 // Modals
 import UnidadModal from './components/Modals/UnidadModal/UnidadModal';
 import EnfermedadModal from './components/Modals/EnfermedadModal/EnfermedadModal';
+import DistritoModal from './components/Modals/DistritoModal/DistritoModal';
 import EditPacienteModal from './components/Modals/EditPacienteModal/EditPacienteModal';
 import ShareModal from './components/Modals/ShareModal/ShareModal';
 
@@ -77,7 +78,7 @@ export default function App() {
   const handleAuthSuccess = (user) => {
     setCurrentUser(user);
     localStorage.setItem('currentUser', JSON.stringify(user));
-    navigateTo('mapa', 'dashboard');
+    navigateTo('landing');
   };
 
   const handleLogout = () => {
@@ -146,6 +147,7 @@ export default function App() {
   // Modals Open state
   const [isUnidadOpen, setIsUnidadOpen] = useState(false);
   const [isEnfermedadOpen, setIsEnfermedadOpen] = useState(false);
+  const [isDistritoOpen, setIsDistritoOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [editingPaciente, setEditingPaciente] = useState(null);
 
@@ -167,10 +169,10 @@ export default function App() {
     loadCatalogs();
   }, []);
 
-  // Fetch patient data when applied filters change
+  // Fetch patient data when applied filters change or user changes
   useEffect(() => {
     loadData(appliedFilters);
-  }, [appliedFilters]);
+  }, [appliedFilters, currentUser]);
 
   const loadCatalogs = () => {
     unidadesService.getUnidades()
@@ -203,7 +205,11 @@ export default function App() {
   };
 
   const handleCreatePaciente = (payload, callback) => {
-    pacientesService.createPaciente(payload)
+    const fullPayload = {
+      ...payload,
+      usuario_id: currentUser ? currentUser.id : null
+    };
+    pacientesService.createPaciente(fullPayload)
       .then(data => {
         if (data.success) {
           showAlert('¡Paciente registrado con éxito!', 'success');
@@ -252,7 +258,7 @@ export default function App() {
   const handleCreateUnidad = (payload, callback) => {
     unidadesService.createUnidad(payload)
       .then(data => {
-        if (data.success) {
+        if (data.success || data.id) {
           showAlert('¡Nueva unidad operativa registrada!', 'success');
           callback();
           loadCatalogs();
@@ -266,7 +272,7 @@ export default function App() {
   const handleCreateEnfermedad = (payload, callback) => {
     enfermedadesService.createEnfermedad(payload)
       .then(data => {
-        if (data.success) {
+        if (data.success || data.id) {
           showAlert('¡Nueva enfermedad registrada!', 'success');
           callback();
           loadCatalogs();
@@ -275,6 +281,20 @@ export default function App() {
         }
       })
       .catch(err => showAlert('Error de conexión al crear enfermedad.', 'error'));
+  };
+
+  const handleCreateDistrito = (payload, callback) => {
+    unidadesService.createUnidad(payload)
+      .then(data => {
+        if (data.success || data.id) {
+          showAlert('¡Nuevo distrito operativo registrado!', 'success');
+          callback();
+          loadCatalogs();
+        } else {
+          showAlert('Error: ' + data.error, 'error');
+        }
+      })
+      .catch(err => showAlert('Error de conexión al crear distrito.', 'error'));
   };
 
   // Filter patients by selected district in applied filters
@@ -373,6 +393,7 @@ export default function App() {
   if (appView === 'register') {
     return (
       <UserRegisterPage
+        onAuthSuccess={handleAuthSuccess}
         onNavigate={(view) => navigateTo(view)}
       />
     );
@@ -447,6 +468,7 @@ export default function App() {
             onSubmit={handleCreatePaciente}
             onAddUnidad={() => setIsUnidadOpen(true)}
             onAddEnfermedad={() => setIsEnfermedadOpen(true)}
+            onAddDistrito={() => setIsDistritoOpen(true)}
           />
         )}
       </div>
@@ -456,6 +478,13 @@ export default function App() {
         isOpen={isUnidadOpen}
         onClose={() => setIsUnidadOpen(false)}
         onSubmit={handleCreateUnidad}
+        distritos={distritos}
+      />
+
+      <DistritoModal
+        isOpen={isDistritoOpen}
+        onClose={() => setIsDistritoOpen(false)}
+        onSubmit={handleCreateDistrito}
       />
 
       <EnfermedadModal

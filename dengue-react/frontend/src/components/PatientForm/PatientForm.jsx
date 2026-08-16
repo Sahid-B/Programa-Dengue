@@ -4,7 +4,7 @@ import { Navigation } from 'lucide-react';
 import { useAlert } from '../../context/AlertContext';
 import styles from './PatientForm.module.css';
 
-export default function PatientForm({ distritos, enfermedades, onSubmit, onAddUnidad, onAddEnfermedad }) {
+export default function PatientForm({ distritos, enfermedades, onSubmit, onAddUnidad, onAddEnfermedad, onAddDistrito }) {
   const { showAlert } = useAlert();
   const today = new Date().toISOString().split('T')[0];
 
@@ -176,19 +176,29 @@ export default function PatientForm({ distritos, enfermedades, onSubmit, onAddUn
 
         <div className="form-group">
           <label>Distrito Operativo*</label>
-          <select
-            value={distrito}
-            onChange={(e) => {
-              setDistrito(e.target.value);
-              setUnidadId('');
-            }}
-            required
-          >
-            <option value="">Seleccione Distrito...</option>
-            {distritos.map((d, i) => (
-              <option key={i} value={d.distrito}>{d.distrito}</option>
-            ))}
-          </select>
+          <div className="input-with-btn">
+            <select
+              value={distrito}
+              onChange={(e) => {
+                setDistrito(e.target.value);
+                setUnidadId('');
+              }}
+              required
+            >
+              <option value="">Seleccione Distrito...</option>
+              {distritos.map((d, i) => (
+                <option key={i} value={d.distrito}>{d.distrito}</option>
+              ))}
+            </select>
+            <button
+              type="button"
+              className="btn-add"
+              onClick={onAddDistrito}
+              title="Agregar Distrito"
+            >
+              ＋
+            </button>
+          </div>
         </div>
 
         <div className="form-group">

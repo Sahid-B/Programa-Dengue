@@ -2,7 +2,7 @@ import React from 'react';
 import PatientForm from '../../components/PatientForm/PatientForm';
 import styles from './RegisterPage.module.css';
 
-export default function RegisterPage({ distritos, enfermedades, onSubmit, onAddUnidad, onAddEnfermedad }) {
+export default function RegisterPage({ distritos, enfermedades, onSubmit, onAddUnidad, onAddEnfermedad, onAddDistrito }) {
   return (
     <div className={styles.container}>
       <PatientForm
@@ -11,6 +11,7 @@ export default function RegisterPage({ distritos, enfermedades, onSubmit, onAddU
         onSubmit={onSubmit}
         onAddUnidad={onAddUnidad}
         onAddEnfermedad={onAddEnfermedad}
+        onAddDistrito={onAddDistrito}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function UnidadModal({ isOpen, onClose, onSubmit }) {
+export default function UnidadModal({ isOpen, onClose, onSubmit, distritos }) {
   const [distrito, setDistrito] = useState('');
   const [unidad, setUnidad] = useState('');
 
@@ -8,7 +8,7 @@ export default function UnidadModal({ isOpen, onClose, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ distrito, nombre: unidad }, () => {
+    onSubmit({ distrito_operativo: distrito, unidad_operativa: unidad }, () => {
       setDistrito('');
       setUnidad('');
       onClose();
@@ -23,13 +23,16 @@ export default function UnidadModal({ isOpen, onClose, onSubmit }) {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Distrito</label>
-            <input
-              type="text"
+            <select
               value={distrito}
               onChange={(e) => setDistrito(e.target.value)}
               required
-              placeholder="Ej: La Concordia"
-            />
+            >
+              <option value="">Seleccione Distrito...</option>
+              {distritos.map((d, i) => (
+                <option key={i} value={d.distrito}>{d.distrito}</option>
+              ))}
+            </select>
           </div>
           
           <div className="form-group">

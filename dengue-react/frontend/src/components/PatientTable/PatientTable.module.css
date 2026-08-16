@@ -141,6 +141,18 @@
   background-size: 1em;
 }
 
+:global(body.light-theme) .select-limit {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.15);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+:global(body.light-theme) .select-limit option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
 .pagination-actions {
   display: flex;
   align-items: center;

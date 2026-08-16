@@ -2,6 +2,12 @@
 require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+    if ($userId === 0) {
+        echo json_encode([]);
+        exit;
+    }
+
     if (isset($_GET['id'])) {
         $id = intval($_GET['id']);
         $sql = "SELECT p.id, p.nombre_completo, p.edad, p.sexo, p.cedula, p.telefono,
@@ -11,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 FROM pacientes_dengue p
                 JOIN catalogo_enfermedades e ON p.enfermedad_id = e.id
                 LEFT JOIN catalogo_unidades_operativas u ON p.unidad_operativa_id = u.id
-                WHERE p.id = ?";
+                WHERE p.id = ? AND p.usuario_id = ? AND p.activo = 1";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('i', $id);
+        $stmt->bind_param('ii', $id, $userId);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($row = $result->fetch_assoc()) {
@@ -25,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit;
     }
 
-    $where = "1=1";
-    $params = [];
-    $types = "";
+    $where = "p.usuario_id = ? AND p.activo = 1";
+    $params = [$userId];
+    $types = "i";
 
     if (!empty($_GET['fecha_inicio']) && !empty($_GET['fecha_fin'])) {
         $where .= " AND p.fecha_consulta BETWEEN ? AND ?";
@@ -46,14 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             WHERE $where
             ORDER BY p.fecha_consulta DESC";
 
-    if (!empty($params)) {
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param($types, ...$params);
-        $stmt->execute();
-        $result = $stmt->get_result();
-    } else {
-        $result = $conn->query($sql);
-    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     $pacientes = [];
     while ($row = $result->fetch_assoc()) {
@@ -93,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $sql = "INSERT INTO pacientes_dengue (nombre_completo, cedula, telefono, direccion_barrio,
                                           edad, sexo, enfermedad_id, nivel_gravedad,
-                                          unidad_operativa_id, fecha_consulta, latitud, longitud, observaciones)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                          unidad_operativa_id, fecha_consulta, latitud, longitud, observaciones, usuario_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
 
@@ -110,10 +112,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $latitud = $data['latitud'];
     $longitud = $data['longitud'];
     $observaciones = $data['observaciones'] ?? '';
+    $usuario_id = isset($data['usuario_id']) ? intval($data['usuario_id']) : 2;
 
-    $stmt->bind_param('ssssisisisdds', $nombre_completo, $cedula, $telefono, $direccion_barrio,
+    $stmt->bind_param('ssssisisisddsi', $nombre_completo, $cedula, $telefono, $direccion_barrio,
                                      $edad, $sexo, $enfermedad_id, $nivel_gravedad,
-                                     $unidad_operativa_id, $fecha_consulta, $latitud, $longitud, $observaciones);
+                                     $unidad_operativa_id, $fecha_consulta, $latitud, $longitud, $observaciones, $usuario_id);
 
     if ($stmt->execute()) {
         echo json_encode(['success' => true, 'id' => $stmt->insert_id]);
@@ -197,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     $id = intval($_GET['id']);
     
-    $stmt = $conn->prepare("DELETE FROM pacientes_dengue WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE pacientes_dengue SET activo = 0 WHERE id = ?");
     $stmt->bind_param('i', $id);
     
     if ($stmt->execute()) {

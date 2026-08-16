@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,7 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('ssss', $nombre, $apellido, $correo, $hash_contrasena);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Usuario registrado exitosamente']);
+        $userId = $stmt->insert_id;
+        echo json_encode([
+            'success' => true,
+            'message' => 'Usuario registrado exitosamente',
+            'user' => [
+                'id' => $userId,
+                'nombre' => $nombre,
+                'apellido' => $apellido,
+                'correo' => $correo
+            ]
+        ]);
     } else {
         http_response_code(500);
         echo json_encode(['error' => 'Error al registrar el usuario']);
