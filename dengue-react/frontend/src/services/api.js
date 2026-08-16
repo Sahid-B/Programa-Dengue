@@ -36,13 +36,27 @@ export const api = {
 
     // Automatically append user_id from localStorage if logged in
     const savedUser = localStorage.getItem('currentUser');
+    let userId = null;
     if (savedUser) {
       try {
         const u = JSON.parse(savedUser);
         if (u && u.id) {
-          url.searchParams.append('user_id', u.id);
+          userId = u.id;
         }
       } catch (e) {}
+    }
+    
+    // Fallback to user_id from URL if not logged in (e.g. readonly mode)
+    if (!userId) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlUserId = urlParams.get('user_id');
+      if (urlUserId) {
+        userId = urlUserId;
+      }
+    }
+
+    if (userId) {
+      url.searchParams.append('user_id', userId);
     }
     
     // Si es en producción y usamos paths relativos, el constructor de URL de arriba con window.location.origin puede cambiar la ruta absoluta

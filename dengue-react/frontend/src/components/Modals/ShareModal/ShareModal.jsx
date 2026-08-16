@@ -3,7 +3,7 @@ import { shareService } from '../../../services/shareService';
 import { Link2, Copy, Check } from 'lucide-react';
 import styles from './ShareModal.module.css';
 
-export default function ShareModal({ isOpen, onClose }) {
+export default function ShareModal({ isOpen, onClose, currentUser }) {
   const [shareUrl, setShareUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -12,24 +12,25 @@ export default function ShareModal({ isOpen, onClose }) {
     if (isOpen) {
       setLoading(true);
       setCopied(false);
+      const userIdSuffix = currentUser && currentUser.id ? `?user_id=${currentUser.id}` : '';
       shareService.getServerIp()
         .then(data => {
           if (data && data.ip) {
             // point to local address
-            setShareUrl(`http://${data.ip}:5173/readonly`);
+            setShareUrl(`http://${data.ip}:5173/readonly${userIdSuffix}`);
           } else {
-            setShareUrl('http://localhost:5173/readonly');
+            setShareUrl(`http://localhost:5173/readonly${userIdSuffix}`);
           }
         })
         .catch(err => {
           console.error(err);
-          setShareUrl('http://localhost:5173/readonly');
+          setShareUrl(`http://localhost:5173/readonly${userIdSuffix}`);
         })
         .finally(() => {
           setLoading(false);
         });
     }
-  }, [isOpen]);
+  }, [isOpen, currentUser]);
 
   const handleCopy = () => {
     const input = document.getElementById('share-url-input-react');
@@ -59,9 +60,9 @@ export default function ShareModal({ isOpen, onClose }) {
           <Link2 size={20} className={styles['link-icon']} />
           Enlace de Solo Lectura
         </h2>
-        
+
         <p className={styles['modal-desc']}>
-          Comparte este enlace para que otros puedan ver el dashboard en tu red local sin modificar los datos.
+          Comparte este enlace para que pueda visualizarse el dahsboard, el mapa y los casos que hallas registrado
         </p>
 
         {loading ? (

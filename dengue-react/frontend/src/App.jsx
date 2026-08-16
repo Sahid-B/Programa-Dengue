@@ -30,6 +30,19 @@ import { unidadesService } from './services/unidadesService';
 // ─── Route Helpers ────────────────────────────────────────────────────────────
 const getRouteFromPath = (path) => {
   const cleanPath = path.toLowerCase().replace(/\/$/, '') || '/';
+  if (cleanPath.startsWith('/readonly')) {
+    const subPath = cleanPath.replace('/readonly', '') || '/';
+    switch (subPath) {
+      case '/mapa':
+        return { appView: 'mapa', activeTab: 'map' };
+      case '/tabla':
+        return { appView: 'mapa', activeTab: 'table' };
+      case '/dashboard':
+      default:
+        return { appView: 'mapa', activeTab: 'dashboard' };
+    }
+  }
+  
   switch (cleanPath) {
     case '/control':
       return { appView: 'control', activeTab: 'dashboard' };
@@ -89,7 +102,7 @@ export default function App() {
 
   // Readonly Mode
   const urlParams = new URLSearchParams(window.location.search);
-  const isReadonly = urlParams.get('readonly') === '1';
+  const [isReadonly] = useState(() => urlParams.get('readonly') === '1' || window.location.pathname.startsWith('/readonly'));
 
   // Navigation state initialized from URL
   const initialRoute = getRouteFromPath(window.location.pathname);
@@ -98,18 +111,28 @@ export default function App() {
 
   // Guard protected routes
   useEffect(() => {
+    if (isReadonly) return; // Allow bypass for readonly links
     if (!currentUser && appView !== 'landing' && appView !== 'login' && appView !== 'register') {
       navigateTo('login');
     }
-  }, [currentUser, appView]);
+  }, [currentUser, appView, isReadonly]);
 
   // Sync state & URL
   const navigateTo = (newAppView, newActiveTab = 'dashboard') => {
     setAppView(newAppView);
     setActiveTab(newActiveTab);
     const targetPath = getPathFromRoute(newAppView, newActiveTab);
-    if (window.location.pathname !== targetPath) {
-      window.history.pushState({}, '', targetPath + window.location.search);
+    
+    let finalPath = targetPath;
+    if (isReadonly) {
+      if (targetPath === '/mapa') finalPath = '/readonly/mapa';
+      else if (targetPath === '/tabla') finalPath = '/readonly/tabla';
+      else if (targetPath === '/dashboard') finalPath = '/readonly/dashboard';
+      else if (targetPath === '/') finalPath = '/readonly';
+    }
+    
+    if (window.location.pathname !== finalPath) {
+      window.history.pushState({}, '', finalPath + window.location.search);
     }
   };
 
@@ -496,6 +519,7 @@ export default function App() {
       <ShareModal
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
+        currentUser={currentUser}
       />
 
       {/* Edit Paciente Modal */}
