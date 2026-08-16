@@ -2078,6 +2078,135 @@ body.light-theme .btn-google-oauth:hover {
   border-color: rgba(15, 23, 42, 0.2);
 }
 
+/* Responsive Global Layout Fixes */
+
+@media (max-width: 768px) {
+  /* Header adjustments */
+  header {
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+  header .brand h1 {
+    font-size: 0.95rem !important;
+  }
+  header .brand p {
+    display: none !important;
+  }
+  .btn-back-menu span {
+    display: none !important;
+  }
+  .btn-back-menu {
+    padding: 0.45rem !important;
+  }
+  header [class*="user-widget"] span {
+    display: none !important;
+  }
+  .btn-share-premium {
+    width: 2.6em !important;
+    padding: 0 !important;
+  }
+  .btn-share-premium .icon {
+    width: calc(100% - 8px) !important;
+    left: 4px !important;
+    top: 4px !important;
+  }
+
+
+  /* Navigation Tabs */
+  .tabs-container {
+    padding: 0.5rem 1rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .tabs-container::-webkit-scrollbar {
+    display: none !important;
+  }
+  .tabs {
+    flex-wrap: nowrap !important;
+  }
+  .tab-btn {
+    padding: 0.5rem 0.85rem !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Dashboard / Map view layout */
+  .dashboard-layout {
+    flex-direction: column-reverse !important;
+    overflow-y: auto !important;
+  }
+  .sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-top: 1px solid var(--border) !important;
+    padding: 1.25rem 1rem !important;
+    overflow-y: visible !important;
+    flex-shrink: 0 !important;
+  }
+  .sidebar .bento-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+  }
+  .map-wrapper {
+    height: 450px !important;
+    flex: none !important;
+    padding: 0.5rem !important;
+  }
+
+  /* Map Badge and Legend */
+  .map-badge {
+    top: 1rem !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    transform: none !important;
+    text-align: center !important;
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
+    border-radius: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    display: inline-block !important;
+  }
+  .map-legend {
+    bottom: 0.5rem !important;
+    right: 0.5rem !important;
+    left: 0.5rem !important;
+    max-width: none !important;
+    padding: 0.5rem !important;
+    border-radius: var(--radius-sm) !important;
+  }
+  .map-legend h4 {
+    display: none !important;
+  }
+  .map-legend-item {
+    font-size: 0.7rem !important;
+  }
+
+  /* Patient Form Container */
+  .form-container {
+    padding: 1.25rem !important;
+    margin: 1rem auto !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .form-container h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Ultra-narrow sidebar adjustments */
+  .sidebar .bento-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Modals */
+  .modal {
+    padding: 1.25rem !important;
+    width: 95% !important;
+  }
+}
+
+
 
 
 

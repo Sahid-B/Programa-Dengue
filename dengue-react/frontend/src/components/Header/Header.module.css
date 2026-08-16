@@ -61,3 +61,27 @@
 .logout-btn:hover {
   transform: scale(1.15);
 }
+
+@media (max-width: 600px) {
+  .header-left {
+    gap: 0.5rem;
+  }
+  .brand-title {
+    gap: 0.4rem;
+  }
+  .brand-logo {
+    width: 24px;
+    height: 24px;
+  }
+  .header-right {
+    gap: 0.5rem;
+  }
+  .share-text {
+    display: none;
+  }
+  .user-widget {
+    padding: 0.45rem 0.5rem;
+    gap: 0;
+  }
+}
+

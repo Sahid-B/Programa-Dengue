@@ -17,41 +17,45 @@ export default function FilterBar({ filters, setFilters, onApply, onClear }) {
 
   return (
     <div className="filter-bar">
-      {/* Date Filter */}
-      <div className={styles['date-filter-label']}>
-        <CalendarRange size={16} className={styles['calendar-icon']} />
-        <span className="filter-label">Filtro de Fechas:</span>
+      {/* Date Filter Group */}
+      <div className={styles['filter-group']}>
+        <div className={styles['date-filter-label']}>
+          <CalendarRange size={16} className={styles['calendar-icon']} />
+          <span className="filter-label">Filtro de Fechas:</span>
+        </div>
+        <div className={styles['date-inputs']}>
+          <input
+            type="date"
+            value={filters.fecha_inicio || ''}
+            onChange={handleStartChange}
+            placeholder="Fecha inicio"
+          />
+          <span className={styles.separator}>a</span>
+          <input
+            type="date"
+            value={filters.fecha_fin || ''}
+            onChange={handleEndChange}
+            placeholder="Fecha fin"
+          />
+        </div>
       </div>
 
-      <input
-        type="date"
-        value={filters.fecha_inicio || ''}
-        onChange={handleStartChange}
-        placeholder="Fecha inicio"
-      />
-      <span className={styles.separator}>a</span>
-      <input
-        type="date"
-        value={filters.fecha_fin || ''}
-        onChange={handleEndChange}
-        placeholder="Fecha fin"
-      />
-
-      {/* District Filter Selector */}
-      <div className={styles['district-filter-label']}>
-        <MapPin size={16} className={styles['map-pin-icon']} />
-        <span className="filter-label">Distrito:</span>
+      {/* District Filter Group */}
+      <div className={styles['filter-group']}>
+        <div className={styles['district-filter-label']}>
+          <MapPin size={16} className={styles['map-pin-icon']} />
+          <span className="filter-label">Distrito:</span>
+        </div>
+        <select
+          value={filters.distrito || 'Todos'}
+          onChange={handleDistritoChange}
+          className="filter-select"
+        >
+          <option value="Todos">Todos</option>
+          <option value="La Concordia">La Concordia</option>
+          <option value="Santo Domingo">Santo Domingo</option>
+        </select>
       </div>
-
-      <select
-        value={filters.distrito || 'Todos'}
-        onChange={handleDistritoChange}
-        className="filter-select"
-      >
-        <option value="Todos">Todos</option>
-        <option value="La Concordia">La Concordia</option>
-        <option value="Santo Domingo">Santo Domingo</option>
-      </select>
 
       {/* Buttons */}
       <div className={styles['buttons-container']}>
