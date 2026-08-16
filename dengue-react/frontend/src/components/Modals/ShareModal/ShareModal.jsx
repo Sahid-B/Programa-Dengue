@@ -13,22 +13,33 @@ export default function ShareModal({ isOpen, onClose, currentUser }) {
       setLoading(true);
       setCopied(false);
       const userIdSuffix = currentUser && currentUser.id ? `?user_id=${currentUser.id}` : '';
-      shareService.getServerIp()
-        .then(data => {
-          if (data && data.ip) {
-            // point to local address
-            setShareUrl(`http://${data.ip}:5173/readonly${userIdSuffix}`);
-          } else {
-            setShareUrl(`http://localhost:5173/readonly${userIdSuffix}`);
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          setShareUrl(`http://localhost:5173/readonly${userIdSuffix}`);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      
+      // Si estamos en producción (ej. Vercel) o no es local, usamos el dominio actual directamente
+      const isLocal = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1' || 
+                      window.location.hostname.startsWith('192.168.') || 
+                      window.location.hostname.startsWith('172.');
+      
+      if (!isLocal) {
+        setShareUrl(`${window.location.origin}/readonly${userIdSuffix}`);
+        setLoading(false);
+      } else {
+        shareService.getServerIp()
+          .then(data => {
+            if (data && data.ip) {
+              setShareUrl(`http://${data.ip}:5173/readonly${userIdSuffix}`);
+            } else {
+              setShareUrl(`${window.location.origin}/readonly${userIdSuffix}`);
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            setShareUrl(`${window.location.origin}/readonly${userIdSuffix}`);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
     }
   }, [isOpen, currentUser]);
 
