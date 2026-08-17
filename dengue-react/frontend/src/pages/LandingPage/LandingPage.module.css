@@ -418,13 +418,11 @@
   font-weight: 700;
   font-family: var(--font-title);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-login-premium:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
 }
 
 .btn-register-premium {
