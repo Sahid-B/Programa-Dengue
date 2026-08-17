@@ -266,12 +266,10 @@ body.light-theme .btn-back-menu:hover {
   background: #0284c7;
   color: #ffffff;
   border: none;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
 }
 .btn-primary:hover {
   background: #0369a1;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
 }
 
 .btn-secondary {
