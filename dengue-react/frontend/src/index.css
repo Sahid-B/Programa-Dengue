@@ -263,13 +263,13 @@ body.light-theme .btn-back-menu:hover {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: #0284c7;
   color: #ffffff;
   border: none;
   box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  background: #0369a1;
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
 }
