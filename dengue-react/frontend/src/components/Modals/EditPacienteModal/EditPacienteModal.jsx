@@ -431,11 +431,11 @@ export default function EditPacienteModal({ isOpen, onClose, paciente, distritos
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn-secondary" onClick={onClose}>
-              CANCELAR
+            <button type="button" className="btn-cancel" onClick={onClose}>
+              Cancelar
             </button>
-            <button type="submit" className="btn-primary">
-              GUARDAR CAMBIOS
+            <button type="submit" className="btn-save">
+              Guardar Cambios
             </button>
           </div>
         </form>

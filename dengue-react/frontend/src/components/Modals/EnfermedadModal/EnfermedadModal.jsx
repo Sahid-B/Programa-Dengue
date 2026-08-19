@@ -79,11 +79,11 @@ export default function EnfermedadModal({ isOpen, onClose, onSubmit }) {
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn-secondary" onClick={onClose}>
-              CANCELAR
+            <button type="button" className="btn-cancel" onClick={onClose}>
+              Cancelar
             </button>
-            <button type="submit" className="btn-primary">
-              AGREGAR ENFERMEDAD
+            <button type="submit" className="btn-save">
+              Agregar Enfermedad
             </button>
           </div>
         </form>
