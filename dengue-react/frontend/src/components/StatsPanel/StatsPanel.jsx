@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, ShieldAlert, Heart, Calendar, Activity } from 'lucide-react';
+import { BarChart3, ShieldAlert, Heart, Calendar, Activity, AlertTriangle } from 'lucide-react';
 import ExpandableBentoGrid from '../ExpandableBentoGrid/ExpandableBentoGrid';
 import styles from './StatsPanel.module.css';
 
@@ -10,7 +10,8 @@ export default function StatsPanel({ stats, pacientes = [], hasCases }) {
     return `${d}/${m}/${y}`;
   };
 
-  const gravePatients = pacientes.filter(p => p.nivel_gravedad === 'grave');
+  const conSignosPatients = pacientes.filter(p => p.cie_10 === 'A971' || p.nombre_enfermedad?.toLowerCase().includes('con signos'));
+  const gravePatients = pacientes.filter(p => p.cie_10 === 'A972' || (p.nivel_gravedad === 'grave' && !p.nombre_enfermedad?.toLowerCase().includes('con signos')));
   const normalPatients = pacientes.filter(p => p.nivel_gravedad === 'normal');
   const latestPatient = pacientes.length > 0 ? pacientes[0] : null;
 
@@ -36,10 +37,37 @@ export default function StatsPanel({ stats, pacientes = [], hasCases }) {
       )
     },
     {
+      id: 'conSignos',
+      title: 'Con Signos',
+      subtitle: `${stats.conSignos || 0} de alarma`,
+      description: 'Pacientes con signos de alarma.',
+      icon: <AlertTriangle size={24} className={styles['icon-orange']} />,
+      className: 'neon-orange',
+      content: (
+        <div className={styles['flex-column']}>
+          <p className={styles['label-text']}>Pacientes con signos de alarma registrados:</p>
+          <div className={styles['list-container']}>
+            {conSignosPatients.length === 0 ? (
+              <div className={styles['text-muted-small']}>No hay pacientes con signos de alarma.</div>
+            ) : (
+              conSignosPatients.map((p, idx) => (
+                <div key={idx} className={styles['list-item-column']}>
+                  <span className={styles['bold-orange']}>{p.nombre_completo}</span>
+                  <span className={styles['sub-text']}>
+                    {p.nombre_enfermedad} | Barrio: {p.direccion_barrio} | Unidad: {p.unidad_operativa}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )
+    },
+    {
       id: 'graves',
-      title: 'Graves',
-      subtitle: `${stats.graves || 0} de alarma`,
-      description: 'Pacientes que requieren monitoreo crítico.',
+      title: 'Dengue Grave',
+      subtitle: `${stats.graves || 0} críticos`,
+      description: 'Pacientes graves que requieren atención crítica.',
       icon: <ShieldAlert size={24} className={styles['icon-red']} />,
       className: 'neon-red',
       content: (
@@ -118,7 +146,6 @@ export default function StatsPanel({ stats, pacientes = [], hasCases }) {
     <div className="sidebar">
       <div>
         <h2>
-          <BarChart3 size={18} className={styles['title-icon']} />
           Estadísticas en Tiempo Real
         </h2>
       </div>

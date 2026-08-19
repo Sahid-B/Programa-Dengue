@@ -332,7 +332,8 @@ export default function App() {
   const computedStats = React.useMemo(() => {
     const list = filteredPacientesByDistrito;
     const total = list.length;
-    const graves = list.filter(p => p.nivel_gravedad === 'grave').length;
+    const conSignos = list.filter(p => p.cie_10 === 'A971' || p.nombre_enfermedad?.toLowerCase().includes('con signos')).length;
+    const graves = list.filter(p => p.cie_10 === 'A972' || (p.nivel_gravedad === 'grave' && !p.nombre_enfermedad?.toLowerCase().includes('con signos'))).length;
     const normales = list.filter(p => p.nivel_gravedad === 'normal').length;
     
     const dates = list.map(p => p.fecha_consulta).filter(Boolean);
@@ -364,6 +365,7 @@ export default function App() {
 
     return {
       total,
+      conSignos,
       graves,
       normales,
       ultimo_reporte,
@@ -383,7 +385,7 @@ export default function App() {
         const [y, m, d] = str.split('-');
         return `${d}/${m}/${y}`;
       };
-      return `📅 Mostrando casos del ${formatDateStr(start)} al ${formatDateStr(end)}${scopeStr} — ${count} casos`;
+      return `Mostrando casos del ${formatDateStr(start)} al ${formatDateStr(end)}${scopeStr} — ${count} casos`;
     }
     return `Mostrando todos los casos${scopeStr} — ${count} casos`;
   };

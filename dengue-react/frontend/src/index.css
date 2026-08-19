@@ -501,6 +501,13 @@ body.light-theme .btn-back-menu:hover {
   color: var(--accent-green);
 }
 
+.stat-card.neon-orange h3 {
+  color: var(--text-primary);
+}
+.stat-card.neon-orange .value {
+  color: var(--accent-orange);
+}
+
 /* Map Wrappers */
 .map-wrapper {
   flex: 1;
@@ -1250,6 +1257,17 @@ body.light-theme .bento-modal-subtitle {
 body.light-theme .bento-modal-content-area {
   color: #334155;
   border-top-color: var(--border);
+}
+
+body.light-theme .bento-close-btn {
+  background: #f1f5f9;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #475569;
+}
+body.light-theme .bento-close-btn:hover {
+  background: var(--accent-red);
+  color: #ffffff;
+  border-color: var(--accent-red);
 }
 
 body.light-theme .table-container {

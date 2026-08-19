@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useOutsideClick } from '../../hooks/useOutsideClick';
 import { X } from 'lucide-react';
@@ -29,93 +30,95 @@ export default function ExpandableBentoGrid({ items }) {
 
   return (
     <>
-      <AnimatePresence>
-        {active && typeof active === 'object' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="bento-overlay"
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {active && typeof active === 'object' ? (
-          <div className="bento-modal-wrapper">
-            <motion.div
-              layoutId={`card-${active.title}-${id}`}
-              ref={ref}
-              className="bento-modal-card"
-            >
-              <motion.button
-                key={`button-close-${active.title}-${id}`}
-                layout
+      {createPortal(
+        <AnimatePresence>
+          {active && typeof active === 'object' && (
+            <>
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.05 } }}
-                className="bento-close-btn"
+                exit={{ opacity: 0 }}
+                className="bento-overlay"
                 onClick={() => setActive(null)}
-                title="Cerrar"
-              >
-                <X size={16} />
-              </motion.button>
-
-              <motion.div layoutId={`image-${active.title}-${id}`}>
-                <div className="bento-modal-header-icon">
-                  {active.icon ? (
-                    <div className="scale-icon">{active.icon}</div>
-                  ) : (
-                    <div className="w-full h-full bg-gray-800" />
-                  )}
-                </div>
-              </motion.div>
-
-              <div className="bento-modal-body">
-                <div className="bento-modal-title-row">
-                  <div>
-                    <motion.h3
-                      layoutId={`title-${active.title}-${id}`}
-                      className="bento-modal-title"
-                    >
-                      {active.title}
-                    </motion.h3>
-                    <motion.p
-                      layoutId={`description-${active.title}-${id}`}
-                      className="bento-modal-subtitle"
-                    >
-                      {active.description}
-                    </motion.p>
-                  </div>
-
-                  {active.visitLink && (
-                    <motion.a
-                      layoutId={`button-${active.title}-${id}`}
-                      href={active.visitLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bento-modal-visit-btn"
-                    >
-                      Ver
-                    </motion.a>
-                  )}
-                </div>
-
-                <div className="bento-modal-content-area">
-                  <motion.div
+              />
+              <div className="bento-modal-wrapper" onClick={() => setActive(null)}>
+                <motion.div
+                  layoutId={`card-${active.title}-${id}`}
+                  ref={ref}
+                  className="bento-modal-card"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <motion.button
+                    key={`button-close-${active.title}-${id}`}
                     layout
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    exit={{ opacity: 0, transition: { duration: 0.05 } }}
+                    className="bento-close-btn"
+                    onClick={() => setActive(null)}
+                    title="Cerrar"
                   >
-                    {active.content}
+                    <X size={16} />
+                  </motion.button>
+
+                  <motion.div layoutId={`image-${active.title}-${id}`}>
+                    <div className="bento-modal-header-icon">
+                      {active.icon ? (
+                        <div className="scale-icon">{active.icon}</div>
+                      ) : (
+                        <div className="w-full h-full bg-gray-800" />
+                      )}
+                    </div>
                   </motion.div>
-                </div>
+
+                  <div className="bento-modal-body">
+                    <div className="bento-modal-title-row">
+                      <div>
+                        <motion.h3
+                          layoutId={`title-${active.title}-${id}`}
+                          className="bento-modal-title"
+                        >
+                          {active.title}
+                        </motion.h3>
+                        <motion.p
+                          layoutId={`description-${active.title}-${id}`}
+                          className="bento-modal-subtitle"
+                        >
+                          {active.description}
+                        </motion.p>
+                      </div>
+
+                      {active.visitLink && (
+                        <motion.a
+                          layoutId={`button-${active.title}-${id}`}
+                          href={active.visitLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bento-modal-visit-btn"
+                        >
+                          Ver
+                        </motion.a>
+                      )}
+                    </div>
+
+                    <div className="bento-modal-content-area">
+                      <motion.div
+                        layout
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                      >
+                        {active.content}
+                      </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </div>
-        ) : null}
-      </AnimatePresence>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       <ul className="bento-grid">
         {items.map((item) => (

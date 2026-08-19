@@ -4,7 +4,7 @@ import {
   PieChart, Pie, Legend,
   AreaChart, Area
 } from 'recharts';
-import { Activity, ShieldAlert, Heart, Calendar, TrendingUp } from 'lucide-react';
+import { Activity, ShieldAlert, Heart, Calendar, TrendingUp, AlertTriangle } from 'lucide-react';
 import styles from './AnalyticsDashboardPage.module.css';
 
 // ─── Custom Tooltip Components ────────────────────────────────────────────────
@@ -167,7 +167,8 @@ export default function AnalyticsDashboardPage({ pacientes = [], stats = {} }) {
       {/* ── Stat Cards ── */}
       <div className={styles['stat-cards-grid']}>
         <StatCard label="Total Casos" value={stats.total ?? 0} sub="Casos registrados activos" icon={Activity} accentColor="#38bdf8" borderColor="rgba(56,189,248,0.25)" />
-        <StatCard label="Casos Graves" value={stats.graves ?? 0} sub="Requieren atención crítica" icon={ShieldAlert} accentColor="#f87171" borderColor="rgba(248,113,113,0.25)" />
+        <StatCard label="Con Signos de Alarma" value={stats.conSignos ?? 0} sub="Requieren observación" icon={AlertTriangle} accentColor="#fb923c" borderColor="rgba(251,146,60,0.25)" />
+        <StatCard label="Dengue Grave" value={stats.graves ?? 0} sub="Requieren atención crítica" icon={ShieldAlert} accentColor="#f87171" borderColor="rgba(248,113,113,0.25)" />
         <StatCard label="Estables" value={stats.normales ?? 0} sub="Sin signos de alarma" icon={Heart} accentColor="#34d399" borderColor="rgba(52,211,153,0.25)" />
         <StatCard label="Último Reporte" value={formatDateFull(stats.ultimo_reporte)} sub="Fecha de consulta más reciente" icon={Calendar} accentColor="#c084fc" borderColor="rgba(192,132,252,0.25)" />
       </div>
