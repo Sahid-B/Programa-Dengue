@@ -27,6 +27,9 @@ import { pacientesService } from './services/pacientesService';
 import { enfermedadesService } from './services/enfermedadesService';
 import { unidadesService } from './services/unidadesService';
 
+// Offline storage
+import { getOfflinePacientes, saveOfflinePaciente, deleteOfflinePaciente } from './utils/indexedDb';
+
 // ─── Route Helpers ────────────────────────────────────────────────────────────
 const getRouteFromPath = (path) => {
   const cleanPath = path.toLowerCase().replace(/\/$/, '') || '/';
@@ -174,6 +177,99 @@ export default function App() {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [editingPaciente, setEditingPaciente] = useState(null);
 
+  // Offline Sync State
+  const [offlineCount, setOfflineCount] = useState(0);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const updateOfflineCount = () => {
+    getOfflinePacientes()
+      .then(list => setOfflineCount(list.length))
+      .catch(err => console.error('Error reading offline queue:', err));
+  };
+
+  const syncOfflinePacientes = () => {
+    if (isSyncing) return;
+    if (!navigator.onLine) {
+      showAlert('No hay conexión a internet. No se puede sincronizar en este momento.', 'warning');
+      return;
+    }
+
+    getOfflinePacientes()
+      .then(async (list) => {
+        if (list.length === 0) return;
+        
+        setIsSyncing(true);
+        showAlert(`Iniciando sincronización de ${list.length} registros...`, 'info');
+
+        let successCount = 0;
+        let hasNetworkError = false;
+
+        for (const item of list) {
+          if (!navigator.onLine) {
+            hasNetworkError = true;
+            break;
+          }
+
+          try {
+            const data = await pacientesService.createPaciente(item.payload);
+            if (data.success || data.id) {
+              await deleteOfflinePaciente(item.offline_id);
+              successCount++;
+            } else {
+              console.error('Server rejected offline record:', data.error);
+              await deleteOfflinePaciente(item.offline_id);
+            }
+          } catch (err) {
+            console.error('Network error during offline sync:', err);
+            hasNetworkError = true;
+            break;
+          }
+        }
+
+        setIsSyncing(false);
+        updateOfflineCount();
+        
+        if (successCount > 0) {
+          showAlert(`¡Sincronización exitosa! Se subieron ${successCount} registros.`, 'success');
+          loadData(appliedFilters);
+        } else if (hasNetworkError) {
+          showAlert('La sincronización se pausó debido a un error de conexión.', 'error');
+        }
+      })
+      .catch(err => {
+        console.error('Error during sync:', err);
+        setIsSyncing(false);
+      });
+  };
+
+  // Monitor offline state and sync when online
+  useEffect(() => {
+    updateOfflineCount();
+
+    const handleOnlineStatus = () => {
+      if (navigator.onLine) {
+        syncOfflinePacientes();
+      }
+    };
+
+    window.addEventListener('online', handleOnlineStatus);
+    
+    // Auto-sync on mount if online
+    if (navigator.onLine) {
+      const t = setTimeout(() => {
+        syncOfflinePacientes();
+      }, 2000);
+      return () => {
+        window.removeEventListener('online', handleOnlineStatus);
+        clearTimeout(t);
+      };
+    }
+
+    return () => {
+      window.removeEventListener('online', handleOnlineStatus);
+    };
+  }, [appliedFilters]);
+
   // Initialize filters as empty on mount to show all cases by default
   useEffect(() => {
     setFilters({ fecha_inicio: '', fecha_fin: '', distrito: 'Todos' });
@@ -232,6 +328,23 @@ export default function App() {
       ...payload,
       usuario_id: currentUser ? currentUser.id : null
     };
+
+    // Check if offline
+    if (!navigator.onLine) {
+      saveOfflinePaciente(fullPayload)
+        .then(() => {
+          showAlert('Sin conexión. Registro guardado localmente y se sincronizará automáticamente al recuperar internet.', 'warning');
+          updateOfflineCount();
+          callback();
+          navigateTo('mapa', 'dashboard');
+        })
+        .catch(err => {
+          console.error('Error saving offline:', err);
+          showAlert('Error al guardar el registro localmente.', 'error');
+        });
+      return;
+    }
+
     pacientesService.createPaciente(fullPayload)
       .then(data => {
         if (data.success) {
@@ -243,7 +356,20 @@ export default function App() {
           showAlert('Error: ' + data.error, 'error');
         }
       })
-      .catch(err => showAlert('Error de conexión al registrar.', 'error'));
+      .catch(err => {
+        console.error('Create patient failed, saving offline:', err);
+        saveOfflinePaciente(fullPayload)
+          .then(() => {
+            showAlert('Error de conexión. El registro se guardó localmente y se sincronizará al restablecer la red.', 'warning');
+            updateOfflineCount();
+            callback();
+            navigateTo('mapa', 'dashboard');
+          })
+          .catch(dbErr => {
+            console.error('Failed to save offline after network failure:', dbErr);
+            showAlert('Error de conexión al registrar.', 'error');
+          });
+      });
   };
 
   const handleUpdatePaciente = (id, payload, callback) => {
@@ -440,6 +566,8 @@ export default function App() {
         onBackMenu={() => navigateTo('landing')}
         currentUser={currentUser}
         onLogout={handleLogout}
+        offlineCount={offlineCount}
+        onSyncClick={syncOfflinePacientes}
       />
 
       <Tabs

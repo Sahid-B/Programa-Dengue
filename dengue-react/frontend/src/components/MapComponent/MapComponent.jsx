@@ -56,6 +56,7 @@ export default function MapComponent({ pacientes, enfermedades = [], badgeText }
               <p><strong>Unidad:</strong> ${p.unidad_operativa}</p>
               <p><strong>Barrio:</strong> ${p.direccion_barrio}</p>
               <p><strong>Fecha:</strong> ${p.fecha_consulta}</p>
+              <p><strong>Observaciones:</strong> ${p.observaciones || 'Ninguna'}</p>
             </div>
           `);
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { ArrowLeft, LogOut } from 'lucide-react';
+import { ArrowLeft, LogOut, CloudLightning } from 'lucide-react';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import styles from './Header.module.css';
 
-export default function Header({ isReadonly, onShareClick, onBackMenu, currentUser, onLogout }) {
+export default function Header({ isReadonly, onShareClick, onBackMenu, currentUser, onLogout, offlineCount = 0, onSyncClick }) {
   return (
     <header>
       <div className={styles['header-left']}>
@@ -33,6 +33,17 @@ export default function Header({ isReadonly, onShareClick, onBackMenu, currentUs
       </div>
 
       <div className={styles['header-right']}>
+        {offlineCount > 0 && (
+          <button
+            onClick={onSyncClick}
+            className={styles['offline-sync-badge']}
+            title={`${offlineCount} registros guardados sin internet. Haz clic para intentar sincronizar.`}
+          >
+            <CloudLightning size={16} className={styles['pulse-animation']} />
+            <span>{offlineCount} Pendientes</span>
+          </button>
+        )}
+
         <ThemeToggle />
 
         {isReadonly && (

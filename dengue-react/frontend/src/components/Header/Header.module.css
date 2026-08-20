@@ -85,3 +85,50 @@
   }
 }
 
+.offline-sync-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.95rem;
+  background: rgba(251, 146, 60, 0.12);
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  border-radius: 12px;
+  color: var(--accent-orange);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-title);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.offline-sync-badge:hover {
+  background: rgba(251, 146, 60, 0.22);
+  border-color: rgba(251, 146, 60, 0.6);
+  box-shadow: 0 4px 14px rgba(251, 146, 60, 0.18);
+  transform: translateY(-1px);
+}
+
+.offline-sync-badge:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
